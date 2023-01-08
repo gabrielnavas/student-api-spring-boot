@@ -43,7 +43,7 @@ public class ClienteController {
 
   @PostMapping()
   @ResponseBody
-  public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
+  public ResponseEntity<Cliente> save(@RequestBody Cliente cliente) {
     Cliente clienteCriado = clientes.save(cliente);
     ResponseEntity<Cliente> resp = new ResponseEntity<>(clienteCriado, HttpStatus.CREATED);
     return resp;

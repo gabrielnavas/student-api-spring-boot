@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 // @Table(name="cliente", schema="public")
 @Table(name="cliente") // -> so quando o nome é diferente na tabela
@@ -22,8 +24,9 @@ public class Cliente {
   
   @Column(name="nome", length = 100)
   private String nome;
-
+  
   @OneToMany(mappedBy = "cliente") // para fazer inner join, partindo de cliente
+  @JsonIgnore //ignorar quando o parse pra json for feito
   private Set<Pedido> pedidos;
 
   public Cliente() {
