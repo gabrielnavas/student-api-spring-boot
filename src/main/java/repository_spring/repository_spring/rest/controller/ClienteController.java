@@ -65,7 +65,7 @@ public class ClienteController {
 
   @DeleteMapping("/{id}")
   @ResponseBody
-  public ResponseEntity<Cliente> remove(@PathVariable Integer id) {
+  public ResponseEntity<Cliente> delete(@PathVariable Integer id) {
     Optional<Cliente> clienteEncontrado = clientes.findById(id);
     if(clienteEncontrado.isPresent()) {
       clientes.delete(clienteEncontrado.get());
