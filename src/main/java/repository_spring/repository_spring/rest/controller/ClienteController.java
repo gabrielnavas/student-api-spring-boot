@@ -57,8 +57,7 @@ public class ClienteController {
       Cliente clienteAtualizar = clienteEncontrado.get();
       clienteAtualizar.setNome(cliente.getNome());
       clientes.save(clienteAtualizar);
-      ResponseEntity<Cliente> resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      return resp;
+      return ResponseEntity.noContent().build();
     }
     return ResponseEntity.notFound().build();
   }
@@ -69,8 +68,7 @@ public class ClienteController {
     Optional<Cliente> clienteEncontrado = clientes.findById(id);
     if(clienteEncontrado.isPresent()) {
       clientes.delete(clienteEncontrado.get());
-      ResponseEntity<Cliente> resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      return resp;
+      return ResponseEntity.noContent().build();
     }
     return ResponseEntity.notFound().build();
   }
