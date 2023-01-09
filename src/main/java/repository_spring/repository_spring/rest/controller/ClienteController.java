@@ -8,13 +8,12 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import repository_spring.repository_spring.domain.entity.Cliente;
 import repository_spring.repository_spring.domain.repository.Clientes;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
-@Controller
+@RestController()
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
@@ -34,7 +33,6 @@ public class ClienteController {
   }
 
   @GetMapping("/{id}")
-  @ResponseBody
   public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
     try {
       Optional<Cliente> clienteEncontrado = clientes.findById(id);
@@ -49,7 +47,6 @@ public class ClienteController {
   }
 
   @PostMapping()
-  @ResponseBody
   public ResponseEntity<Cliente> save(@RequestBody Cliente cliente) {
     try {
       Cliente clienteCriado = clientes.save(cliente);
@@ -62,7 +59,6 @@ public class ClienteController {
   }
 
   @PutMapping("/{id}")
-  @ResponseBody
   public ResponseEntity update(@PathVariable Integer id, @RequestBody Cliente cliente) {
     try {
       return clientes
@@ -80,7 +76,6 @@ public class ClienteController {
   }
 
   @DeleteMapping("/{id}")
-  @ResponseBody
   public ResponseEntity delete(@PathVariable Integer id) {
     try {
       return clientes
@@ -97,7 +92,6 @@ public class ClienteController {
   }
 
   @GetMapping()
-  @ResponseBody
   public ResponseEntity<List<Cliente>> find(Cliente cliente) {
     try {
       ExampleMatcher matcher = ExampleMatcher
