@@ -1,6 +1,7 @@
 package repository_spring.repository_spring.rest.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.websocket.server.PathParam;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,6 +85,25 @@ public class ProdutoController {
           return produto;
         })
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error"));
+    } catch(Exception ex) {
+      if(ex instanceof ResponseStatusException) {
+        throw ex;
+      }
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
+    }
+  }
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void delete(@PathVariable Integer id) {
+    try { 
+      Optional<Produto> produtoEncontrado = produtos.findById(id);
+      if(produtoEncontrado.isPresent()) {
+        produtos.delete(produtoEncontrado.get());
+      } else {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found");
+      }
     } catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
         throw ex;
