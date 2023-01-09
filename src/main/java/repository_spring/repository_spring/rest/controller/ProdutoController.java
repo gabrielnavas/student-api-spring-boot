@@ -55,4 +55,19 @@ public class ProdutoController {
     }
   }
 
+  @GetMapping()
+  public List<Produto> find(Produto produto) {
+    try {
+      ExampleMatcher matcher = ExampleMatcher
+        .matchingAny() //matching or
+        .withIgnoreCase() // ignora as caixas altas e baixas nas strings
+        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
+        
+      Example<Produto> example = Example.of(produto, matcher);
+      return produtos.findAll(example);
+    } catch(Exception ex) {
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
+    }
+  }
 }
