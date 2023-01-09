@@ -3,8 +3,6 @@ package repository_spring.repository_spring.rest.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -84,7 +82,7 @@ public class ProdutoController {
           produtos.save(produto);
           return produto;
         })
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found"));
     } catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
         throw ex;
