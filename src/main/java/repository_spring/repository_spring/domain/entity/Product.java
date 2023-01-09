@@ -7,22 +7,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Produto {
+@Table(name="product")
+public class Product {
   
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name="id")
   private Integer id;
 
-  @Column(name="descricao", length = 100)
-  private String descricao;
+  @Column(name="description", length = 100)
+  private String description;
 
-  @Column(name="preco", precision = 2, length = 20)
-  private BigDecimal preco;
-
-  
+  @Column(name="price", precision = 2, length = 20)
+  private BigDecimal price;
 
   public Integer getId() {
     return id;
@@ -30,17 +30,17 @@ public class Produto {
   public void setId(Integer id) {
     this.id = id;
   }
-  public String getDescricao() {
-    return descricao;
+  public String getDescription() {
+    return description;
   }
-  public void setDescricao(String descricao) {
-    this.descricao = descricao;
+  public void setDescription(String description) {
+    this.description = description;
   }
-  public BigDecimal getPreco() {
-    return preco;
+  public BigDecimal getPrice() {
+    return price;
   }
-  public void setPreco(BigDecimal preco) {
-    this.preco = preco;
+  public void setPrice(BigDecimal price) {
+    this.price = price;
   }
   
 }

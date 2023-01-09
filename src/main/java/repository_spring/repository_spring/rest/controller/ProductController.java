@@ -1,7 +1,6 @@
 package repository_spring.repository_spring.rest.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -18,21 +17,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import repository_spring.repository_spring.domain.entity.Produto;
-import repository_spring.repository_spring.domain.repository.Produtos;
+import repository_spring.repository_spring.domain.entity.Product;
+import repository_spring.repository_spring.domain.repository.ProductRepository;
 
 @RestController()
-@RequestMapping("/api/produtos")
-public class ProdutoController {
+@RequestMapping("/api/products")
+public class ProductController {
 
   @Autowired
-  private Produtos produtos;
+  private ProductRepository produtosRepository;
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public Produto save(@RequestBody Produto produto) {
+  public Product save(@RequestBody Product produtoRepository) {
     try {
-      return produtos.save(produto);
+      return produtosRepository.save(produtoRepository);
     } catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
         throw ex;
@@ -43,9 +42,9 @@ public class ProdutoController {
   }
 
   @GetMapping("/{id}")
-  public Produto getById(@PathVariable Integer id) {
+  public Product getById(@PathVariable Integer id) {
     try {
-      return produtos.findById(id)
+      return produtosRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "producto not found"));
     } catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
@@ -57,15 +56,15 @@ public class ProdutoController {
   }
 
   @GetMapping()
-  public List<Produto> find(Produto produto) {
+  public List<Product> find(Product produto) {
     try {
       ExampleMatcher matcher = ExampleMatcher
         .matchingAny() //matching or
         .withIgnoreCase() // ignora as caixas altas e baixas nas strings
         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
         
-      Example<Produto> example = Example.of(produto, matcher);
-      return produtos.findAll(example);
+      Example<Product> example = Example.of(produto, matcher);
+      return produtosRepository.findAll(example);
     } catch(Exception ex) {
       System.out.println(ex); // utilizar um logger depois
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
@@ -74,13 +73,13 @@ public class ProdutoController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void atualizar(@PathVariable Integer id, Produto produto) {
+  public void atualizar(@PathVariable Integer id, Product produto) {
     try {
-      produtos.findById(id)
-        .map(produtoEncontrado -> {
-          produto.setId(id);
-          produtos.save(produto);
-          return produto;
+      produtosRepository.findById(id)
+        .map(productFound -> {
+          produto.setId(productFound.getId());
+          produtosRepository.save(produto);
+          return Void.TYPE;
         })
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found"));
     } catch(Exception ex) {
@@ -96,12 +95,11 @@ public class ProdutoController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable Integer id) {
     try { 
-      Optional<Produto> produtoEncontrado = produtos.findById(id);
-      if(produtoEncontrado.isPresent()) {
-        produtos.delete(produtoEncontrado.get());
-      } else {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found");
-      }
+      produtosRepository.findById(id).map(productFound -> {
+        produtosRepository.delete(productFound);
+        return Void.TYPE;
+      })
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found"));
     } catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
         throw ex;

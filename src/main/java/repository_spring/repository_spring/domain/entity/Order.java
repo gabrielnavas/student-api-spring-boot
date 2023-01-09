@@ -15,8 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="pedido")
-public class Pedido {
+@Table(name="order")
+public class Order {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,51 +24,56 @@ public class Pedido {
   private Integer id;
 
   @ManyToOne
-  @JoinColumn(name="cliente_id")
-  private Cliente cliente;
+  @JoinColumn(name="client_id")
+  private Client client;
   
-  @Column(name = "data_pedido")
-  private LocalDate dataPedido;
+  @Column(name = "created_at")
+  private LocalDate createdAt;
 
   @Column(name = "total", precision = 20, scale=2)
   private BigDecimal total;
 
-  @OneToMany(mappedBy = "pedido")
-  private Set<ItemPedido> itensPedido;
-  
+  @OneToMany(mappedBy = "order")
+  private Set<ItemOrder> itemsOrder;
+
   public Integer getId() {
     return id;
   }
+
   public void setId(Integer id) {
     this.id = id;
   }
-  public Cliente getCliente() {
-    return cliente;
+
+  public Client getClient() {
+    return client;
   }
-  public void setCliente(Cliente cliente) {
-    this.cliente = cliente;
+
+  public void setClient(Client client) {
+    this.client = client;
   }
-  public LocalDate getDataPedido() {
-    return dataPedido;
+
+  public LocalDate getCreatedAt() {
+    return createdAt;
   }
-  public void setDataPedido(LocalDate dataPedido) {
-    this.dataPedido = dataPedido;
+
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
   }
+
   public BigDecimal getTotal() {
     return total;
   }
+
   public void setTotal(BigDecimal total) {
     this.total = total;
   }
-  public Set<ItemPedido> getItensPedido() {
-    return itensPedido;
+
+  public Set<ItemOrder> getItemsOrder() {
+    return itemsOrder;
   }
-  public void setItensPedido(Set<ItemPedido> itensPedido) {
-    this.itensPedido = itensPedido;
-  }
-  @Override
-  public String toString() {
-    return "Pedido [id=" + id + ", cliente=" + cliente + ", dataPedido=" + dataPedido + ", total=" + total + "]";
+
+  public void setItemsOrder(Set<ItemOrder> itemsOrder) {
+    this.itemsOrder = itemsOrder;
   }
   
   

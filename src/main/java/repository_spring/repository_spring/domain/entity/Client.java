@@ -13,31 +13,31 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-// @Table(name="cliente", schema="public")
-@Table(name="cliente") // -> so quando o nome é diferente na tabela
-public class Cliente {
+// @Table(name="client", schema="public")
+@Table(name="client") // -> so quando o nome é diferente na tabela
+public class Client {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id") // -> so quando o nome é diferente na coluna
   private Integer id;
   
-  @Column(name="nome", length = 100)
-  private String nome;
+  @Column(name="name", length = 100)
+  private String name;
 
   @Column(name="cpf", length = 11)
   private String cpf;
 
-  @OneToMany(mappedBy = "cliente") // para fazer inner join, partindo de cliente
+  @OneToMany(mappedBy = "client") // para fazer inner join, partindo de cliente
   @JsonIgnore //ignorar quando o parse pra json for feito
-  private Set<Pedido> pedidos;
+  private Set<Order> orders;
 
-  public Cliente() {
+  public Client() {
   }
 
-  public Cliente(Integer id, String nome) {
+  public Client(Integer id, String name) {
     this.id = id;
-    this.nome = nome;
+    this.name = name;
   }
 
   public Integer getId() {
@@ -48,12 +48,12 @@ public class Cliente {
     this.id = id;
   }
 
-  public String getNome() {
-    return nome;
+  public String getName() {
+    return name;
   }
 
-  public void setNome(String nome) {
-    this.nome = nome;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getCpf() {
@@ -64,16 +64,16 @@ public class Cliente {
     this.cpf = cpf;
   }
 
-  public Set<Pedido> getPedidos() {
-    return pedidos;
+  public Set<Order> getOrders() {
+    return orders;
   }
 
-  public void setPedidos(Set<Pedido> pedidos) {
-    this.pedidos = pedidos;
+  public void setOrders(Set<Order> orders) {
+    this.orders = orders;
   } 
 
   @Override
   public String toString() {
-    return "Cliente [id=" + id + ", nome=" + nome + "]";
+    return "Client [id=" + id + ", name=" + name + "]";
   }
 }

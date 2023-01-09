@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,29 +16,26 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import repository_spring.repository_spring.domain.entity.Cliente;
-import repository_spring.repository_spring.domain.repository.Clientes;
+import repository_spring.repository_spring.domain.entity.Client;
+import repository_spring.repository_spring.domain.repository.ClientRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController()
-@RequestMapping("/api/clientes")
-public class ClienteController {
+@RequestMapping("/api/clients")
+public class ClientController {
 
-  private Clientes clientes;
-
-  public ClienteController(@Autowired Clientes clientes) {
-    this.clientes=clientes;
-  }
+  @Autowired
+  private ClientRepository clientRepository;
 
   @GetMapping("/{id}")
-  public Cliente getClienteById(@PathVariable Integer id) {
+  public Client getClientById(@PathVariable Integer id) {
     try {
-      return clientes
+      return clientRepository
         .findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "cliente not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "client not found"));
     }
     catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
@@ -52,9 +48,9 @@ public class ClienteController {
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public Cliente save(@RequestBody Cliente cliente) {
+  public Client save(@RequestBody Client client) {
     try {
-      return clientes.save(cliente);
+      return clientRepository.save(client);
     }
     catch(Exception ex) {
       System.out.println(ex); // utilizar um logger depois
@@ -64,14 +60,14 @@ public class ClienteController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void update(@PathVariable Integer id, @RequestBody Cliente cliente) {
+  public void update(@PathVariable Integer id, @RequestBody Client client) {
     try {
-      Optional<Cliente> clienteFound = clientes.findById(id);
-      if(clienteFound.isPresent()) {
-        cliente.setId(clienteFound.get().getId());
-        clientes.save(cliente);
+      Optional<Client> clientFound = clientRepository.findById(id);
+      if(clientFound.isPresent()) {
+        client.setId(clientFound.get().getId());
+        clientRepository.save(client);
       } else {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cliente not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "client not found");
       }
     }
     catch(Exception ex) {
@@ -87,11 +83,11 @@ public class ClienteController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable Integer id) {
     try {
-      Optional<Cliente> clienteFound = clientes.findById(id);
-      if(clienteFound.isPresent()) {
-        clientes.delete(clienteFound.get());
+      Optional<Client> clientFound = clientRepository.findById(id);
+      if(clientFound.isPresent()) {
+        clientRepository.delete(clientFound.get());
       } else {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cliente not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "client not found");
       }
     }
     catch(Exception ex) {
@@ -104,15 +100,15 @@ public class ClienteController {
   }
 
   @GetMapping()
-  public List<Cliente> find(Cliente cliente) {
+  public List<Client> find(Client client) {
     try {
       ExampleMatcher matcher = ExampleMatcher
         .matchingAny() //matching or
         .withIgnoreCase() // ignora as caixas altas e baixas nas strings
         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
         
-      Example<Cliente> example = Example.of(cliente, matcher);
-      return clientes.findAll(example);
+      Example<Client> example = Example.of(client, matcher);
+      return clientRepository.findAll(example);
     }
     catch(Exception ex) {
       System.out.println(ex); // utilizar um logger depois
