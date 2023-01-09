@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import repository_spring.repository_spring.domain.entity.Cliente;
 import repository_spring.repository_spring.domain.repository.Clientes;
@@ -33,77 +35,88 @@ public class ClienteController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
+  public Cliente getClienteById(@PathVariable Integer id) {
     try {
-      Optional<Cliente> clienteEncontrado = clientes.findById(id);
-      if(clienteEncontrado.isPresent()) {
-        return ResponseEntity.ok(clienteEncontrado.get());
-      }
-      return ResponseEntity.notFound().build();
+      return clientes
+        .findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "cliente not found"));
     }
     catch(Exception ex) {
-      return ResponseEntity.internalServerError().build();
+      if(ex instanceof ResponseStatusException) {
+        throw ex;
+      }
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
     }
   }
 
   @PostMapping()
-  public ResponseEntity<Cliente> save(@RequestBody Cliente cliente) {
+  @ResponseStatus(HttpStatus.CREATED)
+  public Cliente save(@RequestBody Cliente cliente) {
     try {
-      Cliente clienteCriado = clientes.save(cliente);
-      ResponseEntity<Cliente> resp = new ResponseEntity<>(clienteCriado, HttpStatus.CREATED);
-      return resp;
+      return clientes.save(cliente);
     }
     catch(Exception ex) {
-      return ResponseEntity.internalServerError().build();
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
     }
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity update(@PathVariable Integer id, @RequestBody Cliente cliente) {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void update(@PathVariable Integer id, @RequestBody Cliente cliente) {
     try {
-      return clientes
-        .findById(id)
-        .map(clienteEncontrado -> {
-          cliente.setId(clienteEncontrado.getId());
-          clientes.save(cliente);
-          return ResponseEntity.noContent().build();
-        })
-        .orElseGet(() -> ResponseEntity.notFound().build());
+      Optional<Cliente> clienteFound = clientes.findById(id);
+      if(clienteFound.isPresent()) {
+        cliente.setId(clienteFound.get().getId());
+        clientes.save(cliente);
+      } else {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cliente not found");
+      }
     }
     catch(Exception ex) {
-      return ResponseEntity.internalServerError().build();
+      if(ex instanceof ResponseStatusException) {
+        throw ex;
+      }
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
     }
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity delete(@PathVariable Integer id) {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void delete(@PathVariable Integer id) {
     try {
-      return clientes
-        .findById(id)
-        .map(clienteEncontrado -> {
-          clientes.delete(clienteEncontrado);
-          return ResponseEntity.noContent().build();
-        })
-        .orElseGet(() -> ResponseEntity.notFound().build());
+      Optional<Cliente> clienteFound = clientes.findById(id);
+      if(clienteFound.isPresent()) {
+        clientes.delete(clienteFound.get());
+      } else {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cliente not found");
+      }
     }
     catch(Exception ex) {
-      return ResponseEntity.internalServerError().build();
+      if(ex instanceof ResponseStatusException) {
+        throw ex;
+      }
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
     }
   }
 
   @GetMapping()
-  public ResponseEntity<List<Cliente>> find(Cliente cliente) {
+  public List<Cliente> find(Cliente cliente) {
     try {
       ExampleMatcher matcher = ExampleMatcher
-        .matching()
+        .matchingAny() //matching or
         .withIgnoreCase() // ignora as caixas altas e baixas nas strings
         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
+        
       Example<Cliente> example = Example.of(cliente, matcher);
-      List<Cliente> clientesEncontrados = clientes.findAll(example);
-      return ResponseEntity.ok(clientesEncontrados);
+      return clientes.findAll(example);
     }
     catch(Exception ex) {
-      return ResponseEntity.internalServerError().build();
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
     }
   }
 }
