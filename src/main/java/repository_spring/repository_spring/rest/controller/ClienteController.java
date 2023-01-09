@@ -34,50 +34,75 @@ public class ClienteController {
   @GetMapping("/{id}")
   @ResponseBody
   public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
-    Optional<Cliente> clienteEncontrado = clientes.findById(id);
-    if(clienteEncontrado.isPresent()) {
-      return ResponseEntity.ok(clienteEncontrado.get());
+    try {
+      Optional<Cliente> clienteEncontrado = clientes.findById(id);
+      if(clienteEncontrado.isPresent()) {
+        return ResponseEntity.ok(clienteEncontrado.get());
+      }
+      return ResponseEntity.notFound().build();
     }
-    return ResponseEntity.notFound().build();
+    catch(Exception ex) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
 
   @PostMapping()
   @ResponseBody
   public ResponseEntity<Cliente> save(@RequestBody Cliente cliente) {
-    Cliente clienteCriado = clientes.save(cliente);
-    ResponseEntity<Cliente> resp = new ResponseEntity<>(clienteCriado, HttpStatus.CREATED);
-    return resp;
+    try {
+      Cliente clienteCriado = clientes.save(cliente);
+      ResponseEntity<Cliente> resp = new ResponseEntity<>(clienteCriado, HttpStatus.CREATED);
+      return resp;
+    }
+    catch(Exception ex) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
 
   @PutMapping("/{id}")
   @ResponseBody
   public ResponseEntity update(@PathVariable Integer id, @RequestBody Cliente cliente) {
-    return clientes
-      .findById(id)
-      .map(clienteEncontrado -> {
-        cliente.setId(clienteEncontrado.getId());
-        clientes.save(cliente);
-        return ResponseEntity.noContent().build();
-      })
-      .orElseGet(() -> ResponseEntity.notFound().build());
+    try {
+      return clientes
+        .findById(id)
+        .map(clienteEncontrado -> {
+          cliente.setId(clienteEncontrado.getId());
+          clientes.save(cliente);
+          return ResponseEntity.noContent().build();
+        })
+        .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    catch(Exception ex) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
 
   @DeleteMapping("/{id}")
   @ResponseBody
   public ResponseEntity delete(@PathVariable Integer id) {
-    return clientes
-      .findById(id)
-      .map(clienteEncontrado -> {
-        clientes.delete(clienteEncontrado);
-        return ResponseEntity.noContent().build();
-      })
-      .orElseGet(() -> ResponseEntity.notFound().build());
+    try {
+      return clientes
+        .findById(id)
+        .map(clienteEncontrado -> {
+          clientes.delete(clienteEncontrado);
+          return ResponseEntity.noContent().build();
+        })
+        .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    catch(Exception ex) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
 
   @GetMapping()
   @ResponseBody
   public ResponseEntity<List<Cliente>> getAll() {
-    List<Cliente> clientesEncontrados = clientes.findAll();
-    return ResponseEntity.ok(clientesEncontrados);
+    try {
+      List<Cliente> clientesEncontrados = clientes.findAll();
+      return ResponseEntity.ok(clientesEncontrados);
+    }
+    catch(Exception ex) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
 }
