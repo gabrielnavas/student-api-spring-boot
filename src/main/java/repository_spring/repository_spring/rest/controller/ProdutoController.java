@@ -1,8 +1,12 @@
 package repository_spring.repository_spring.rest.controller;
 
+import java.util.List;
+
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,4 +40,19 @@ public class ProdutoController {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
     }
   }
+
+  @GetMapping("/{id}")
+  public Produto getById(@PathVariable Integer id) {
+    try {
+      return produtos.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "producto not found"));
+    } catch(Exception ex) {
+      if(ex instanceof ResponseStatusException) {
+        throw ex;
+      }
+      System.out.println(ex); // utilizar um logger depois
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
+    }
+  }
+
 }
