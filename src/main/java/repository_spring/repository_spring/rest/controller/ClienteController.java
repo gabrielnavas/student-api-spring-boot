@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -96,9 +98,14 @@ public class ClienteController {
 
   @GetMapping()
   @ResponseBody
-  public ResponseEntity<List<Cliente>> getAll() {
+  public ResponseEntity<List<Cliente>> find(Cliente cliente) {
     try {
-      List<Cliente> clientesEncontrados = clientes.findAll();
+      ExampleMatcher matcher = ExampleMatcher
+        .matching()
+        .withIgnoreCase() // ignora as caixas altas e baixas nas strings
+        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
+      Example<Cliente> example = Example.of(cliente, matcher);
+      List<Cliente> clientesEncontrados = clientes.findAll(example);
       return ResponseEntity.ok(clientesEncontrados);
     }
     catch(Exception ex) {
