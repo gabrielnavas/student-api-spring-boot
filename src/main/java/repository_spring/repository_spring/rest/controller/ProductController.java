@@ -29,9 +29,9 @@ public class ProductController {
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public Product save(@RequestBody Product produtoRepository) {
+  public Product save(@RequestBody Product product) {
     try {
-      return produtosRepository.save(produtoRepository);
+      return produtosRepository.save(product);
     } catch(Exception ex) {
       if(ex instanceof ResponseStatusException) {
         throw ex;

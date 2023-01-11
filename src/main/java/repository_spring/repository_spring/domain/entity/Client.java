@@ -1,22 +1,19 @@
 package repository_spring.repository_spring.domain.entity;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-// @Table(name="client", schema="public")
-@Table(name="client") // -> so quando o nome é diferente na tabela
+@Table(name="clients") // -> so quando o nome é diferente na tabela
 public class Client {
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id") // -> so quando o nome é diferente na coluna
@@ -28,22 +25,21 @@ public class Client {
   @Column(name="cpf", length = 11)
   private String cpf;
 
-  @OneToMany(mappedBy = "client") // para fazer inner join, partindo de cliente
-  @JsonIgnore //ignorar quando o parse pra json for feito
-  private Set<Order> orders;
+  @OneToMany(mappedBy = "client", fetch = FetchType.LAZY) // para fazer inner join, partindo de cliente
+  private List<Order> orders;
 
   public Client() {
   }
 
-  public Client(Integer id, String name) {
-    this.id = id;
+  public Client(String name, String cpf) {
     this.name = name;
+    this.cpf = cpf;
   }
 
   public Integer getId() {
     return id;
   }
-  
+
   public void setId(Integer id) {
     this.id = id;
   }
@@ -64,16 +60,16 @@ public class Client {
     this.cpf = cpf;
   }
 
-  public Set<Order> getOrders() {
+  public List<Order> getOrders() {
     return orders;
   }
 
-  public void setOrders(Set<Order> orders) {
+  public void setOrders(List<Order> orders) {
     this.orders = orders;
-  } 
+  }
 
   @Override
   public String toString() {
-    return "Client [id=" + id + ", name=" + name + "]";
+    return "Client [id=" + id + ", name=" + name + ", cpf=" + cpf + "]";
   }
 }

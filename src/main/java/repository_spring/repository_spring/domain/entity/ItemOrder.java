@@ -1,19 +1,19 @@
 package repository_spring.repository_spring.domain.entity;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
-@Table(name = "item_order")
+@Table(name = "items_order")
 public class ItemOrder {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,15 +24,25 @@ public class ItemOrder {
   @JoinColumn(name = "order_id")
   private Order order;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "product_id")
   private Product product;
 
   @Column(name = "amount")
   private Integer amount;
 
-  @Column(name = "total", precision = 20, scale=2)
-  private BigDecimal price;
+  @Column(name = "price", precision = 20, scale = 2)
+  @Min(value = 0)
+  @Max(value = 1_000_000)
+  private Double price;
+
+  public ItemOrder() {
+  }
+
+  public ItemOrder(Integer amount, @Min(0) @Max(1_000_000) Double price) {
+    this.amount = amount;
+    this.price = price;
+  }
 
   public Integer getId() {
     return id;
@@ -66,11 +76,17 @@ public class ItemOrder {
     this.amount = amount;
   }
 
-  public BigDecimal getPrice() {
+  public Double getPrice() {
     return price;
   }
 
-  public void setPrice(BigDecimal price) {
+  public void setPrice(Double price) {
     this.price = price;
+  }
+
+  @Override
+  public String toString() {
+    return "ItemOrder [id=" + id + ", order=" + order + ", product=" + product + ", amount=" + amount + ", price="
+        + price + "]";
   }
 }
