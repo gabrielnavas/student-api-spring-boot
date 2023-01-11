@@ -1,4 +1,4 @@
-package repository_spring.repository_spring.service;
+package repository_spring.repository_spring.service.order;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,9 +18,9 @@ import repository_spring.repository_spring.domain.repository.OrderRepository;
 import repository_spring.repository_spring.domain.repository.ProductRepository;
 import repository_spring.repository_spring.rest.dto.ItemOrderDTO;
 import repository_spring.repository_spring.rest.dto.OrderDTO;
-import repository_spring.repository_spring.service.exceptions.ClientNotFoundException;
-import repository_spring.repository_spring.service.exceptions.ProductNotFoundException;
-import repository_spring.repository_spring.service.interfaces.ISaveOrderService;
+import repository_spring.repository_spring.service.order.exceptions.ClientNotFoundException;
+import repository_spring.repository_spring.service.order.exceptions.ProductNotFoundException;
+import repository_spring.repository_spring.service.order.interfaces.ISaveOrderService;
 
 
 @Service

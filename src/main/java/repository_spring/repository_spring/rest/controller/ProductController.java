@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import repository_spring.repository_spring.domain.entity.Product;
 import repository_spring.repository_spring.domain.repository.ProductRepository;
+import repository_spring.repository_spring.service.order.exceptions.ProductNotFoundException;
 
 @RestController()
 @RequestMapping("/api/products")
@@ -43,69 +44,40 @@ public class ProductController {
 
   @GetMapping("/{id}")
   public Product getById(@PathVariable Integer id) {
-    try {
-      return produtosRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "producto not found"));
-    } catch(Exception ex) {
-      if(ex instanceof ResponseStatusException) {
-        throw ex;
-      }
-      System.out.println(ex); // utilizar um logger depois
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
-    }
+    return produtosRepository.findById(id)
+      .orElseThrow(() -> new ProductNotFoundException(id));
   }
 
   @GetMapping()
   public List<Product> find(Product produto) {
-    try {
-      ExampleMatcher matcher = ExampleMatcher
-        .matchingAny() //matching or
-        .withIgnoreCase() // ignora as caixas altas e baixas nas strings
-        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
-        
-      Example<Product> example = Example.of(produto, matcher);
-      return produtosRepository.findAll(example);
-    } catch(Exception ex) {
-      System.out.println(ex); // utilizar um logger depois
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
-    }
+    ExampleMatcher matcher = ExampleMatcher
+      .matchingAny() //matching or
+      .withIgnoreCase() // ignora as caixas altas e baixas nas strings
+      .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // tipo um link
+      
+    Example<Product> example = Example.of(produto, matcher);
+    return produtosRepository.findAll(example);
   }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void atualizar(@PathVariable Integer id, Product produto) {
-    try {
-      produtosRepository.findById(id)
-        .map(productFound -> {
-          produto.setId(productFound.getId());
-          produtosRepository.save(produto);
-          return Void.TYPE;
-        })
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found"));
-    } catch(Exception ex) {
-      if(ex instanceof ResponseStatusException) {
-        throw ex;
-      }
-      System.out.println(ex); // utilizar um logger depois
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
-    }
+    produtosRepository.findById(id)
+      .map(productFound -> {
+        produto.setId(productFound.getId());
+        produtosRepository.save(produto);
+        return Void.TYPE;
+      })
+      .orElseThrow(() -> new ProductNotFoundException(id));
   }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable Integer id) {
-    try { 
-      produtosRepository.findById(id).map(productFound -> {
-        produtosRepository.delete(productFound);
-        return Void.TYPE;
-      })
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "produto not found"));
-    } catch(Exception ex) {
-      if(ex instanceof ResponseStatusException) {
-        throw ex;
-      }
-      System.out.println(ex); // utilizar um logger depois
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "server error");
-    }
+    produtosRepository.findById(id).map(productFound -> {
+      produtosRepository.delete(productFound);
+      return Void.TYPE;
+    })
+    .orElseThrow(() -> new ProductNotFoundException(id));
   }
 }

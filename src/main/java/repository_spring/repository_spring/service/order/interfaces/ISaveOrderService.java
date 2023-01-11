@@ -1,4 +1,4 @@
-package repository_spring.repository_spring.service.interfaces;
+package repository_spring.repository_spring.service.order.interfaces;
 
 import java.util.List;
 
