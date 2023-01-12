@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="clients") // -> so quando o nome é diferente na tabela
@@ -20,6 +21,7 @@ public class Client {
   private Integer id;
   
   @Column(name="name", length = 100)
+  @NotEmpty(message = "name is empty")
   private String name;
 
   @Column(name="cpf", length = 11)

@@ -3,6 +3,8 @@ package repository_spring.repository_spring.rest.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -39,7 +41,7 @@ public class ClientController {
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public Client save(@RequestBody Client client) {
+  public Client save(@RequestBody @Valid Client client) {
     return clientRepository.save(client);
   }
 
