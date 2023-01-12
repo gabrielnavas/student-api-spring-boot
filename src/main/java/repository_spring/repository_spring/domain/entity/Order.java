@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +39,10 @@ public class Order {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name="client_id")
   private Client client;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status")
+  private StatusOrder statusOrder;
 
   @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
   private List<ItemOrder> itemsOrder;
@@ -93,6 +99,14 @@ public class Order {
 
   public void setItemsOrder(List<ItemOrder> itemsOrder) {
     this.itemsOrder = itemsOrder;
+  }
+
+  public StatusOrder getStatusOrder() {
+    return statusOrder;
+  }
+
+  public void setStatusOrder(StatusOrder statusOrder) {
+    this.statusOrder = statusOrder;
   }
 
   @Override

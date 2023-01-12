@@ -11,12 +11,13 @@ public class InfoOrderDTO {
   private String nameClient;
   private Double total;
   private String createdAtOrder;
+  private String status;
   private List<InfoItemOrderDTO> items;
   
 
   public InfoOrderDTO() { }
 
-  public InfoOrderDTO(Integer id, String cpf, String nameClient, Double total, String createdAtOrder,
+  public InfoOrderDTO(Integer id, String cpf, String nameClient, Double total, String createdAtOrder, String status,
       List<InfoItemOrderDTO> items) {
     this.id = id;
     this.cpf = cpf;
@@ -24,6 +25,7 @@ public class InfoOrderDTO {
     this.total = total;
     this.createdAtOrder = createdAtOrder;
     this.items = items;
+    this.status=status;
   }
   
 
@@ -73,5 +75,13 @@ public class InfoOrderDTO {
 
   public void setCreatedAtOrder(String createdAtOrder) {
     this.createdAtOrder = createdAtOrder;
+  }
+  
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
   }
 }

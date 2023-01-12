@@ -57,6 +57,7 @@ public class OrderController {
       .nameClient(order.getClient().getName())
       .createdAtOrder(order.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
       .items(parserToInfoItemsOrderDTO(order.getItemsOrder()))
+      .status(order.getStatusOrder().name())
       .build();
   }
 

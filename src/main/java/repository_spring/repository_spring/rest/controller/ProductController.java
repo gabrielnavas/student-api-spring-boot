@@ -61,7 +61,7 @@ public class ProductController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void atualizar(@PathVariable Integer id, Product produto) {
+  public void update(@PathVariable Integer id, Product produto) {
     produtosRepository.findById(id)
       .map(productFound -> {
         produto.setId(productFound.getId());

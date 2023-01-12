@@ -12,6 +12,7 @@ import repository_spring.repository_spring.domain.entity.Client;
 import repository_spring.repository_spring.domain.entity.ItemOrder;
 import repository_spring.repository_spring.domain.entity.Order;
 import repository_spring.repository_spring.domain.entity.Product;
+import repository_spring.repository_spring.domain.entity.StatusOrder;
 import repository_spring.repository_spring.domain.repository.ClientRepository;
 import repository_spring.repository_spring.domain.repository.ItemOrderRepository;
 import repository_spring.repository_spring.domain.repository.OrderRepository;
@@ -60,6 +61,7 @@ public class SaveOrderService implements ISaveOrderService{
     order.setClient(client);
     order.setCreatedAt(LocalDate.now());
     order.setTotal(orderDTO.getTotal());
+    order.setStatusOrder(StatusOrder.ACCOMPLISHED);
     return order;
   }
 
