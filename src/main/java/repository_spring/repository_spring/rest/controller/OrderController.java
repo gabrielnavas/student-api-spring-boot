@@ -49,7 +49,7 @@ public class OrderController {
     return order.getId();
   }
 
-  @PatchMapping("/{id}")
+  @PatchMapping("/status/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateStatus(@PathVariable Integer id, @RequestBody UpdateStatusOrderDTO dto) {
     updateOrder.updateStatusOrder(id, StatusOrder.valueOf(dto.getNewStatus().toUpperCase()));
