@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 @Entity
 @Table(name="clients") // -> so quando o nome é diferente na tabela
 public class Client {
@@ -21,10 +23,12 @@ public class Client {
   private Integer id;
   
   @Column(name="name", length = 100)
-  @NotEmpty(message = "name is empty")
+  @NotEmpty(message = "name is mandatory")
   private String name;
 
   @Column(name="cpf", length = 11)
+  @NotEmpty(message = "cpf is mandatory")
+  @CPF(message = "cpf is invalid")
   private String cpf;
 
   @OneToMany(mappedBy = "client", fetch = FetchType.LAZY) // para fazer inner join, partindo de cliente

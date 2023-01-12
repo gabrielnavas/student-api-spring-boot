@@ -46,7 +46,7 @@ public class SaveOrderService implements ISaveOrderService{
     Order order = createOrder(orderDTO);
     order = orderRepository.save(order);
 
-    order = addItemsOrder(order, orderDTO.getItemsProduct());
+    order = addItemsOrder(order, orderDTO.getItemsOrder());
     order.getItemsOrder().forEach(itemOrder -> itemOrderRepository.save(itemOrder));
     
     return order;

@@ -2,6 +2,8 @@ package repository_spring.repository_spring.rest.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -30,7 +32,7 @@ public class ProductController {
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public Product save(@RequestBody Product product) {
+  public Product save(@RequestBody @Valid Product product) {
     try {
       return produtosRepository.save(product);
     } catch(Exception ex) {
@@ -61,7 +63,7 @@ public class ProductController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void update(@PathVariable Integer id, Product produto) {
+  public void update(@PathVariable Integer id, @Valid Product produto) {
     produtosRepository.findById(id)
       .map(productFound -> {
         produto.setId(productFound.getId());

@@ -6,8 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,10 +26,10 @@ public class Product {
   private Integer id;
 
   @Column(name="description", length = 100)
+  @NotEmpty(message = "description is mandatory")
   private String description;
 
   @Column(name="price", precision = 2, length = 20)
-  @Min(value = 0_00)
-  @Max(value = 1_000_000)
+  @NotNull(message = "price is mandatory")
   private Double price;
 }

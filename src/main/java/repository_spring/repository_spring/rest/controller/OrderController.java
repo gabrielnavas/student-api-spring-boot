@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
@@ -44,7 +46,7 @@ public class OrderController {
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public Integer save(@RequestBody OrderDTO dto) {
+  public Integer save(@RequestBody @Valid OrderDTO dto) {
     Order order = saveOrderService.save(dto);
     return order.getId();
   }
