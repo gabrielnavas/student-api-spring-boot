@@ -26,10 +26,10 @@ public class Product {
   private Integer id;
 
   @Column(name="description", length = 100)
-  @NotEmpty(message = "description is mandatory")
+  @NotEmpty(message = "{field.description.notempty}")
   private String description;
 
   @Column(name="price", precision = 2, length = 20)
-  @NotNull(message = "price is mandatory")
+  @NotNull(message = "{field.price.notempty}")
   private Double price;
 }

@@ -23,12 +23,12 @@ public class Client {
   private Integer id;
   
   @Column(name="name", length = 100)
-  @NotEmpty(message = "name is mandatory")
+  @NotEmpty(message = "{field.name.notempty}")
   private String name;
 
   @Column(name="cpf", length = 11)
-  @NotEmpty(message = "cpf is mandatory")
-  @CPF(message = "cpf is invalid")
+  @NotEmpty(message = "{cpf is mandatory}")
+  @CPF(message = "{field.cpf.invalid}")
   private String cpf;
 
   @OneToMany(mappedBy = "client", fetch = FetchType.LAZY) // para fazer inner join, partindo de cliente

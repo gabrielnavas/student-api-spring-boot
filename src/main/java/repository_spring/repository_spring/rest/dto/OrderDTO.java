@@ -9,13 +9,13 @@ import repository_spring.repository_spring.validation.NotEmptyList;
 
 public class OrderDTO{
 
-  @NotNull(message = "missing client id")
+  @NotNull(message = "{field.id-client.notnull}")
   private Integer clientId;
 
-  @NotNull(message = "missing total")
+  @NotNull(message = "{field.total-order.notnull}")
   private Double total;
 
-  @NotEmptyList(message = "items product cannot be empty")
+  @NotEmptyList(message = "{field.items-order.notempty}")
   private List<ItemOrderDTO> itemsOrder;
   
   public OrderDTO() {}
