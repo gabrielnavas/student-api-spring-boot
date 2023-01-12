@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import repository_spring.repository_spring.domain.entity.ItemOrder;
 import repository_spring.repository_spring.domain.entity.Order;
+import repository_spring.repository_spring.domain.entity.StatusOrder;
 import repository_spring.repository_spring.rest.dto.InfoItemOrderDTO;
 import repository_spring.repository_spring.rest.dto.InfoOrderDTO;
 import repository_spring.repository_spring.rest.dto.OrderDTO;
+import repository_spring.repository_spring.rest.dto.UpdateStatusOrderDTO;
 import repository_spring.repository_spring.service.order.interfaces.IFindOrderService;
 import repository_spring.repository_spring.service.order.interfaces.ISaveOrderService;
+import repository_spring.repository_spring.service.order.interfaces.IUpdateOrder;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -30,9 +34,13 @@ public class OrderController {
 
   @Autowired
   private ISaveOrderService saveOrderService;
-  
+
   @Autowired
   private IFindOrderService findOrderService;
+
+
+  @Autowired
+  private IUpdateOrder updateOrder;
 
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
@@ -41,12 +49,17 @@ public class OrderController {
     return order.getId();
   }
 
+  @PatchMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateStatus(@PathVariable Integer id, @RequestBody UpdateStatusOrderDTO dto) {
+    updateOrder.updateStatusOrder(id, StatusOrder.valueOf(dto.getNewStatus().toUpperCase()));
+  }
+
   @GetMapping("/{id}")
   public InfoOrderDTO findById(@PathVariable Integer id) {
     Order order = findOrderService.findById(id);
     return parserToInfoOrderDTO(order);
   }
-
 
   private InfoOrderDTO parserToInfoOrderDTO(Order order) {
     return InfoOrderDTO

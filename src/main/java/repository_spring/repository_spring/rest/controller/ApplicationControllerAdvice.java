@@ -37,7 +37,6 @@ public class ApplicationControllerAdvice {
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ApiErrors handleAnyException(Exception ex) {
-    final String errorMessage = ex.getMessage();
-    return new ApiErrors(errorMessage);
+    return new ApiErrors("server error");
   }
 }
