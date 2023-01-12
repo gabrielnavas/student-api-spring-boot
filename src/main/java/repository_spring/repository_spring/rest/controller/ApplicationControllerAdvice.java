@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import repository_spring.repository_spring.rest.ApiErrors;
 import repository_spring.repository_spring.service.order.exceptions.ClientNotFoundException;
+import repository_spring.repository_spring.service.order.exceptions.OrderNotFoundException;
 import repository_spring.repository_spring.service.order.exceptions.ProductNotFoundException;
 
 @RestControllerAdvice
@@ -22,6 +23,13 @@ public class ApplicationControllerAdvice {
   @ExceptionHandler(ClientNotFoundException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ApiErrors handleClientNotFoundException(ClientNotFoundException ex) {
+    final String errorMessage = ex.getMessage();
+    return new ApiErrors(errorMessage);
+  }
+
+  @ExceptionHandler(OrderNotFoundException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ApiErrors handleOrderNotFoundException(OrderNotFoundException ex) {
     final String errorMessage = ex.getMessage();
     return new ApiErrors(errorMessage);
   }

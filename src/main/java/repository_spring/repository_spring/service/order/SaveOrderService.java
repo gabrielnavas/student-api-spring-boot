@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import repository_spring.repository_spring.domain.entity.Client;
 import repository_spring.repository_spring.domain.entity.ItemOrder;
 import repository_spring.repository_spring.domain.entity.Order;
@@ -24,13 +24,20 @@ import repository_spring.repository_spring.service.order.interfaces.ISaveOrderSe
 
 
 @Service
-@RequiredArgsConstructor
 public class SaveOrderService implements ISaveOrderService{
   
-  private final OrderRepository orderRepository;
-  private final ItemOrderRepository itemOrderRepository;
-  private final ClientRepository clientRepository;
-  private final ProductRepository productRepository;
+  @Autowired
+  private OrderRepository orderRepository;
+  
+  @Autowired
+  private ItemOrderRepository itemOrderRepository;
+  
+  @Autowired
+  private ClientRepository clientRepository;
+  
+  @Autowired
+  private ProductRepository productRepository;
+
 
   @Override
   @Transactional
@@ -44,7 +51,6 @@ public class SaveOrderService implements ISaveOrderService{
     return order;
   }
 
-  @Override
   public Order createOrder(OrderDTO orderDTO) {
     Client client = clientRepository
       .findById(orderDTO.getClientId())
@@ -57,7 +63,6 @@ public class SaveOrderService implements ISaveOrderService{
     return order;
   }
 
-  @Override
   public Order addItemsOrder(Order order, List<ItemOrderDTO> itemsOrder) {
     for(ItemOrderDTO itemOrderDTO: itemsOrder) {
       Product product =  productRepository
